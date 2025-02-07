@@ -1,4 +1,5 @@
-SVEP1 enables efficient binding of Angiopoietin2 to the TIE1 receptor, allowing receptor phosphorylation and downstream signaling
+SVEP1 enables efficient binding of Angiopoietin2 to the TIE1 receptor, allowing receptor phosphorylation and downstream signaling <br>
+
 Uphoff et al. 2025 eLife
 
 The Pipeline was used to analyze the nuclear exclusion of FOXO1 in human lymphatic endothelial cells after SVEP1 and ANG2 stimulation (Figure 4).
