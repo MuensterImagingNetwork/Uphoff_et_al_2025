@@ -1,0 +1,106 @@
+<!--Created by Vision4D 4.1.1 tags/4.1.1-release^0@7cc682bb5ff6655c792831bba295e22254077f83-->
+<pipeline version="4.0" created="2024-01-09T15:29:00.221457Z" modified="2024-08-19T18:26:40.8635563+02:00">
+  <operations>
+    <operation type-id="arivis.analysis.selection" id="arivis.analysis.selection1">
+      <outputs>[{"Channels":[{"v":1,"id":"arivis.analysis.selection1.0.0","p":null,"n":"Channel #1","a":true},{"v":1,"id":"arivis.analysis.selection1.0.1","p":null,"n":"Channel #2","a":true},{"v":1,"id":"arivis.analysis.selection1.0.2","p":null,"n":"Channel #3","a":true},{"v":1,"id":"arivis.analysis.selection1.0.3","p":null,"n":"Channel #4","a":true}]},{"Channels":[]},{"ObjectTags":[]}]</outputs>
+      <settings>{"Document":"C:\\Users\\Schulte-Merker-2\\Desktop\\2024_08_16_ARIVIS Files\\SVEP1_ANG2_2_SIM-Extended Depth of Focus-01.sis","ScopeID":"0","PixelSize":{"X":0.098604366183280945,"Y":0.098604366183280945,"Z":1.0},"PixelType":1,"ChannelCount":4,"Bounds":"0, 0, 2048, 2048","Channels":"1-4","Planes":"1","Frames":"1","SelectionHint":3,"Zoom":1.0,"ZoomXYOnly":false,"CropToBounds":false,"LegacyMode":false}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.voxel.Normalization" id="arivis.analysis.voxel.Normalization1" name="Normalization">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.selection1.0.0"},{"v":1,"id":"arivis.analysis.selection1.0.1"},{"v":1,"id":"arivis.analysis.selection1.0.2"},{"v":1,"id":"arivis.analysis.selection1.0.3"}]}]</inputs>
+      <outputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.0","p":"arivis.analysis.selection1.0.0","n":"Channel #1","a":true},{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.1","p":"arivis.analysis.selection1.0.1","n":"Channel #2","a":true},{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.2","p":"arivis.analysis.selection1.0.2","n":"Channel #3","a":true},{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.3","p":"arivis.analysis.selection1.0.3","n":"Channel #4","a":true}]}]</outputs>
+      <settings algorithmId="arivis.analysis.imagetoimage.normalization.Simple" version="1.0" OutputMode="1" OutputFile="" CreateNewChannels="False" NewChannelNamePattern="$o ($n)">
+        <strategy planewise="False" />
+        <filter preparation="TimePoint" maintaincolorrange="True">{"Minimum":0.0,"Maximum":0.0}</filter>
+      </settings>
+    </operation>
+    <operation type-id="arivis.analysis.voxel.Denoising" id="arivis.analysis.voxel.Denoising1" name="Denoising">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.0"}]}]</inputs>
+      <outputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Denoising1.0.0","p":"arivis.analysis.voxel.Normalization1.0.0","n":"Channel #1","a":true}]}]</outputs>
+      <settings algorithmId="arivis.analysis.imagetoimage.denoising.Bilateral" version="1.0" OutputMode="1" OutputFile="" CreateNewChannels="False" NewChannelNamePattern="$o ($n)">
+        <strategy planewise="False" />
+        <filter>{"IntensityRange":19813.0,"Diameter":2.5}</filter>
+      </settings>
+    </operation>
+    <operation type-id="arivis.analysis.voxel.Denoising" id="arivis.analysis.voxel.Denoising2" name="Denoising 2">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.1"}]}]</inputs>
+      <outputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Denoising2.0.0","p":"arivis.analysis.voxel.Normalization1.0.1","n":"Channel #2","a":true}]}]</outputs>
+      <settings algorithmId="arivis.analysis.imagetoimage.denoising.Bilateral" version="1.0" OutputMode="1" OutputFile="" CreateNewChannels="False" NewChannelNamePattern="$o ($n)">
+        <strategy planewise="False" />
+        <filter>{"IntensityRange":11580.0,"Diameter":5.324635773897171}</filter>
+      </settings>
+    </operation>
+    <operation type-id="arivis.analysis.voxelresult" id="arivis.analysis.voxelresult1">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxel.Denoising1.0.0"},{"v":1,"id":"arivis.analysis.voxel.Denoising2.0.0"},{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.2"},{"v":1,"id":"arivis.analysis.voxel.Normalization1.0.3"}]}]</inputs>
+      <outputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxelresult1.0.0","p":"arivis.analysis.voxel.Denoising1.0.0","n":"Channel #1","a":true},{"v":1,"id":"arivis.analysis.voxelresult1.0.1","p":"arivis.analysis.voxel.Denoising2.0.0","n":"Channel #2","a":true},{"v":1,"id":"arivis.analysis.voxelresult1.0.2","p":"arivis.analysis.voxel.Normalization1.0.2","n":"Channel #3","a":true},{"v":1,"id":"arivis.analysis.voxelresult1.0.3","p":"arivis.analysis.voxel.Normalization1.0.3","n":"Channel #4","a":true}]},{}]</outputs>
+      <settings mode="4" useForAnnotations="false" filename="C:\Users\Schulte-Merker-2\Desktop\2024_05_28__ARIVIS FILES\NormalizedDenoising-Result Storage-pixel type changed-Result Storages_Denoising.sis" scopename="" autochannels="true" />
+    </operation>
+    <operation type-id="arivis.analysis.segmentation.BlobFinder" id="arivis.analysis.segmentation.BlobFinder1" name="Blob Finder Nuclei">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxelresult1.0.1"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.segmentation.BlobFinder1.0.0","p":null,"n":"Nuclei_blob","a":true,"cm":2,"c":"#0000D8"}]}]</outputs>
+      <settings>{"Level":0.099235398748397013,"Diameter":15.776698589324951,"Threshold":0.1765,"Normalization":"FirstTimePointGlobal","Minimum":0.0,"Maximum":2846.0,"PerformPlaneWise":false,"Connectivity":"FullXY","AllowHoles":false,"ObjectNamePattern":"$t #$I ($o)","UseExponentialNormalization":true}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.segmentation.CellposeSegmentationOperation" id="arivis.analysis.segmentation.CellposeSegmentationOperation1" name="Cellpose-based Segmenter">
+      <inputs>[{"Channels":[{"v":1,"id":"arivis.analysis.voxelresult1.0.0"}]},{"Channels":[{"v":1,"id":"arivis.analysis.voxelresult1.0.1"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.segmentation.CellposeSegmentationOperation1.0.0","p":null,"n":"Cellpose-based Segmenter","a":true,"cm":2,"c":"#FFEA00"}]}]</outputs>
+      <settings object-name-pattern="$t #$I ($o)">{"Model":"cyto2","ExternalModelFilePath":null,"Diameter":47.428700134158134,"FlowThreshold":0.4,"ProbabilityThreshold":-6.0,"MinSizeFilterActive":false,"MinSize":{"Value":0.062747593280265787,"Type":1},"PerformPlaneWise":true,"Connectivity":"FullXY","AllowHoles":false,"ObjectNamePattern":"$t #$I ($o)","SmoothNetworkOutput":true,"SmoothNetworkOutputSigma":2.4,"UseFlowThreshold":true}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.FeatureFilter" id="arivis.analysis.volume.FeatureFilter3" name="Nuclei Filter">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.segmentation.BlobFinder1.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter3.0.0","p":null,"n":"Nuclei Filter","a":true,"cm":0,"c":"#D800D8"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter3.0.1","p":null,"n":"not Nuclei Filter","a":false,"cm":0,"c":"Cyan"}]}]</outputs>
+      <settings>{"FilterParts":[{"Mode":3,"Feature1":{"FeatureId":"arivis.analysis.features.type","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":0.0,"CompareValue2":1.0,"CompareString":""},{"Mode":0,"Feature1":{"FeatureId":"arivis.analysis.features.volume","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":2E-17,"CompareValue2":1.0,"CompareString":""}]}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.FeatureFilter" id="arivis.analysis.volume.FeatureFilter1" name="cell Filter">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.segmentation.CellposeSegmentationOperation1.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter1.0.0","p":null,"n":"cell Filter","a":true,"cm":0,"c":"#C96EC9"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter1.0.1","p":null,"n":"not cell Filter","a":false,"cm":0,"c":"Cyan"}]}]</outputs>
+      <settings>{"FilterParts":[{"Mode":3,"Feature1":{"FeatureId":"arivis.analysis.features.type","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":0.0,"CompareValue2":1.0,"CompareString":""},{"Mode":0,"Feature1":{"FeatureId":"arivis.analysis.features.volume","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":1.0000000000000001E-16,"CompareValue2":1.0,"CompareString":""}]}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.Compartmentalization" id="arivis.analysis.volume.Compartmentalization2" name="onlzCellswith1Nuclei">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter1.0.0"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter3.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.Compartmentalization2.0.0","p":null,"n":"onlzCellswith1Nuclei","a":true,"cm":0,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization2.0.1","p":null,"n":"Nuclei Filter in cell Filter","a":false,"cm":4,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization2.0.2","p":null,"n":"cell Filter with Nuclei Filter","a":false,"cm":4,"c":"Cyan"}]}]</outputs>
+      <settings version="2.0">{"NodeLevels":[1,2],"NodeSettings":[{"ProvideAsFilteredOutputForParent":false,"FilteredOutputForParentName":" with cell Filter","Modes":3,"Overlap":0.0,"MaximumDistance":0.0,"ProvideAsOutput":false,"OutputName":"cell Filter","ProvideOverlapAsFeature":false,"ProvideDistanceAsFeature":false,"ProvideModeTags":false},{"ProvideAsFilteredOutputForParent":false,"FilteredOutputForParentName":"cell Filter with Nuclei Filter","Modes":3,"Overlap":0.8,"MaximumDistance":2.0,"ProvideAsOutput":false,"OutputName":"Nuclei Filter in cell Filter","ProvideOverlapAsFeature":false,"ProvideDistanceAsFeature":false,"ProvideModeTags":false}]}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.FeatureFilter" id="arivis.analysis.volume.FeatureFilter5" name="Object Feature Filter">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.Compartmentalization2.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.0","p":null,"n":"Object Feature Filter wanted cells","a":true,"cm":0,"c":"#BA7800"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.1","p":null,"n":"not Object Feature Filter","a":false,"cm":0,"c":"Cyan"}]}]</outputs>
+      <settings>{"FilterParts":[{"Mode":3,"Feature1":{"FeatureId":"arivis.analysis.features.type","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":0.0,"CompareValue2":1.0,"CompareString":""},{"Mode":0,"Feature1":{"FeatureId":"arivis.analysis.features.childcount","ValueIndex":0},"Feature2":null,"Comparison":5,"CompareValue1":2.0,"CompareValue2":1.0,"CompareString":""},{"Mode":0,"Feature1":{"FeatureId":"arivis.analysis.features.childcount","ValueIndex":0},"Feature2":null,"Comparison":1,"CompareValue1":0.0,"CompareValue2":1.0,"CompareString":""}]}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.ObjectMath" id="arivis.analysis.volume.ObjectMath1" name="Object Math">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.0"}]},{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter3.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.ObjectMath1.0.0","p":null,"n":"Cytoplasm","a":true,"cm":2,"c":"Cyan"}]}]</outputs>
+      <settings object-name-pattern="$n ($o)">
+        <modifier>{"ModificationType":0,"NeedsSecondInput":true,"UseFullConnectivity":true,"OnlyModifiedObjects":false}</modifier>
+      </settings>
+    </operation>
+    <operation type-id="arivis.analysis.volume.Compartmentalization" id="arivis.analysis.volume.Compartmentalization1" name="Compartments">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.0"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter3.0.0"},{"v":1,"id":"arivis.analysis.volume.ObjectMath1.0.0"}]}]</inputs>
+      <outputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.Compartmentalization1.0.0","p":null,"n":"Compartments","a":true,"cm":0,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization1.0.1","p":null,"n":"Nuclei Filter in Object Feature Filter wanted cells","a":false,"cm":4,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization1.0.2","p":null,"n":"Object Feature Filter wanted cells with Nuclei Filter","a":false,"cm":4,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization1.0.3","p":null,"n":"Cytoplasm in Object Feature Filter wanted cells","a":false,"cm":4,"c":"Cyan"},{"v":1,"id":"arivis.analysis.volume.Compartmentalization1.0.4","p":null,"n":"Object Feature Filter wanted cells with Cytoplasm","a":false,"cm":4,"c":"Cyan"}]}]</outputs>
+      <settings version="2.0">{"NodeLevels":[1,2,2],"NodeSettings":[{"ProvideAsFilteredOutputForParent":false,"FilteredOutputForParentName":" with Object Feature Filter wanted cells","Modes":3,"Overlap":0.0,"MaximumDistance":0.0,"ProvideAsOutput":false,"OutputName":"Object Feature Filter wanted cells","ProvideOverlapAsFeature":false,"ProvideDistanceAsFeature":false,"ProvideModeTags":false},{"ProvideAsFilteredOutputForParent":false,"FilteredOutputForParentName":"Object Feature Filter wanted cells with Nuclei Filter","Modes":3,"Overlap":0.8,"MaximumDistance":0.0,"ProvideAsOutput":false,"OutputName":"Nuclei Filter in Object Feature Filter wanted cells","ProvideOverlapAsFeature":false,"ProvideDistanceAsFeature":false,"ProvideModeTags":false},{"ProvideAsFilteredOutputForParent":false,"FilteredOutputForParentName":"Object Feature Filter wanted cells with Cytoplasm","Modes":3,"Overlap":0.0,"MaximumDistance":0.0,"ProvideAsOutput":false,"OutputName":"Cytoplasm in Object Feature Filter wanted cells","ProvideOverlapAsFeature":false,"ProvideDistanceAsFeature":false,"ProvideModeTags":false}]}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.store.ExportAnnotation" id="arivis.analysis.store.ExportAnnotation1" name="Export Object Features">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.0"}]}]</inputs>
+      <settings version="3.1">{"File":"C:\\Users\\Schulte-Merker-2\\Desktop\\2024_08_16_ARIVIS Files\\Analysis_FOXO1 Nuclei.csv","Features":[{"FeatureId":"arivis.analysis.features.scope","ValueIndex":0},{"FeatureId":"id","ValueIndex":0},{"FeatureId":"arivis.analysis.features.name","ValueIndex":0},{"FeatureId":"arivis.analysis.features.childcount","ValueIndex":0},{"FeatureId":"arivis.analysis.features.intensities[2]","ValueIndex":2},{"FeatureId":"arivis.analysis.features.volume","ValueIndex":0},{"FeatureId":"6af5bc32-9629-4534-ae20-ea0a8a281102","ValueIndex":3},{"FeatureId":"76dffdff-eaa3-410e-842f-bd7a587f1aa8","ValueIndex":3}],"Details":[],"Mode":5}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.store.ExportLabelImages" id="arivis.analysis.store.ExportLabelImages2" name="Export Objects to Labeled Images 2">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.ObjectMath1.0.0"}]}]</inputs>
+      <settings>{"FileName":"C:\\Users\\Schulte-Merker-2\\Desktop\\2024_08_16_ARIVIS Files\\_cytoplasm.tiff","ConversionMode":1,"SkipEmptyPlanes":false,"FileFormat":"MultipleTiffFiles"}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.store.StoreAnnotation" id="arivis.analysis.store.StoreAnnotation1">
+      <inputs>[{"ObjectTags":[{"v":1,"id":"arivis.analysis.volume.Compartmentalization2.0.0"},{"v":1,"id":"arivis.analysis.volume.FeatureFilter5.0.0"},{"v":1,"id":"arivis.analysis.volume.ObjectMath1.0.0"}]}]</inputs>
+      <settings version="V_2_12_5">{"NamePattern":"$n","TagPattern":"$n","TagsToAdd":null,"TagsToDelete":["not SVEP1 filter","Cellpose-based Segmenter","Nuclei Filter","cell Filter","Compartments","Nuclei_blob"],"PreserveAllTags":false,"KeepOnUndo":false}</settings>
+    </operation>
+    <operation type-id="arivis.analysis.endOfPipeline" id="arivis.analysis.endOfPipeline1">
+      <settings />
+    </operation>
+  </operations>
+  <layout>
+    <entry name="arivis.analysis.store.StoreAnnotation1">[]</entry>
+    <entry name="_viewpartstates">arivis.analysis.selection1=advanced
+arivis.analysis.voxelresult1=collapsed
+arivis.analysis.segmentation.CellposeSegmentationOperation1=advanced
+arivis.analysis.volume.ObjectMath1=advanced
+</entry>
+    <entry name="arivis.analysis.voxel.Denoising1">{"Filter.IntensityRange":{"pixeltype":"UInt16","maximum":"65535"}}</entry>
+    <entry name="arivis.analysis.voxel.Denoising2">{"Filter.IntensityRange":{"pixeltype":"UInt16","maximum":"35161"}}</entry>
+  </layout>
+  <features><![CDATA[{"Version":"3.1","Features":[{"FactoryId":"arivis.analysis.features.intensities","Id":"arivis.analysis.features.intensities[2]","Name":"Intensities #3","Parameter":"{\"Channel\":2}"},{"FactoryId":"arivis.objectstore.features.groupstatistics","Id":"6af5bc32-9629-4534-ae20-ea0a8a281102","Name":"Intensity_Cytoplasm","Parameter":"{\"FeatureId\":\"arivis.analysis.features.intensities[2]\",\"Value\":2,\"Tag\":\"Cytoplasm\",\"Subgroups\":false,\"ObjectType\":null}"},{"FactoryId":"arivis.objectstore.features.groupstatistics","Id":"76dffdff-eaa3-410e-842f-bd7a587f1aa8","Name":"Intensity_Nuclei","Parameter":"{\"FeatureId\":\"arivis.analysis.features.intensities[2]\",\"Value\":2,\"Tag\":\"Nuclei Filter\",\"Subgroups\":false,\"ObjectType\":null}"}]}]]></features>
+</pipeline>
